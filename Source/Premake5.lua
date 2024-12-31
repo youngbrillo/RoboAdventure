@@ -5,7 +5,7 @@ project "gamelib"
     architecture "x86_64"
     files {"gamelib/**.cpp", "gamelib/**.hpp", "gamelib/**.c", "gamelib/**.h"}
 
-    externalincludedirs { "../Vendor/include" }
+    externalincludedirs { "../Vendors/include" }
     includedirs {  "../Vendors/imgui"}
     libdirs { "../Vendors/lib"}
     links {  "raylib", "glfw3", "WinMM", "yamlcpp", "lua", "box2dd", "imgui"}

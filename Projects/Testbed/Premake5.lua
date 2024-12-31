@@ -8,7 +8,7 @@ project "TestBed"
     files { "source/**.cpp", "source/**.hpp", "source/**.c",  "source/**.h"}
 
     -- includes and linking -------------------------------------
-    externalincludedirs {"../../Vendor/include"}
+    externalincludedirs {"../../Vendors/include"}
     includedirs {"../../Source",}
     includedirs {"../../Vendors/imgui"}
     
