@@ -19,5 +19,5 @@ group ""
 
 group "Libraries"
 	include "Source"
-	include "Vendor/imgui"
+	include "Vendors/imgui"
 group ""

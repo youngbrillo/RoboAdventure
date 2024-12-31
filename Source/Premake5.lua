@@ -6,8 +6,8 @@ project "gamelib"
     files {"gamelib/**.cpp", "gamelib/**.hpp", "gamelib/**.c", "gamelib/**.h"}
 
     externalincludedirs { "../Vendor/include" }
-    includedirs {  "../Vendor/imgui"}
-    libdirs { "../Vendor/lib"}
+    includedirs {  "../Vendors/imgui"}
+    libdirs { "../Vendors/lib"}
     links {  "raylib", "glfw3", "WinMM", "yamlcpp", "lua", "box2dd", "imgui"}
 
 

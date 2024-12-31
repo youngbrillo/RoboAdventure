@@ -10,10 +10,10 @@ project "Robo Adventure (Game)"
     -- includes and linking -------------------------------------
     externalincludedirs {"../../Vendor/include"}
     includedirs {"../../Source",}
-    includedirs {"../../Vendor/imgui"}
+    includedirs {"../../Vendors/imgui"}
     
 	links { "gamelib", "raylib", "glfw3", "WinMM", "yamlcpp", "lua", "box2dd", "imgui"}
-    libdirs { "../../Vendor/lib"}
+    libdirs { "../../Vendors/lib"}
 
     -- filters ------------------------------------------
     filter { "configurations:Debug" }
