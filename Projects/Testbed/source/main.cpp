@@ -18,6 +18,9 @@ int main(int argc, char** argv)
 	manager.LoadSettings();
 	rlImGuiSetup(true);
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_::ImGuiConfigFlags_DockingEnable;
+
+	glib::io::InitInputMap();
+
 	while (!WindowShouldClose())
 	{
 		float dt = GetFrameTime();

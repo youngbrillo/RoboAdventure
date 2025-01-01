@@ -10,7 +10,6 @@ namespace testbed
 		glib::Velocity3D velocity;
 		glib::Model3D model;
 
-
 		GameObject(Vector3 position = { 0.0f, 0.0f, 0.0f }) :
 			transform(position)
 		{}
@@ -66,10 +65,8 @@ namespace testbed
 
 	class PlayerControllerTest2 : public Test
 	{
-		int cameraMode = CAMERA_FIRST_PERSON;
 		GameObject_Animating player;
-		Camera3D camera;
-
+		glib::Camera3DController camController;
 		std::vector<Model> model_list;
 
 	public:
@@ -105,7 +102,7 @@ namespace testbed
 
 		virtual void Set()
 		{
-			camera =
+			camController.camera =
 			{
 				.position = {10.0f, 10.0f, 10.0f},
 				.target = {0.0f, 0.0f, 0.0f},
@@ -123,11 +120,12 @@ namespace testbed
 
 		virtual void Update(float dt)
 		{
+			camController.Update(dt);
 			player.Update(dt);
 		}
 		virtual void Draw()
 		{
-			BeginMode3D(camera);
+			BeginMode3D(camController.camera);
 			DrawGrid(10, 1.0f);
 			player.Draw();
 			EndMode3D();
@@ -137,7 +135,8 @@ namespace testbed
 		virtual void Inspect()
 		{
 			ImGui::Checkbox("paused", &this->paused);
-			ImGui::Camera3DEdit("camera", &this->camera);
+			camController.Inspect();
+			//ImGui::Camera3DEdit("camera", &this->camera);
 			player.Inspect("Player");
 		};
 		static Test* Generate() { return new PlayerControllerTest2(); }
