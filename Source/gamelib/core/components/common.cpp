@@ -6,9 +6,9 @@ void glib::Transform3D::Inspect(const char* label)
 {
 	if (ImGui::TreeNode(label))
 	{
-		ImGui::DragFloat3(label, &translation.x);
-		ImGui::DragFloat4(label, &rotation.x);
-		ImGui::DragFloat3(label, &scale.x);
+		ImGui::DragFloat3("translation", &translation.x);
+		ImGui::DragFloat4("rotation", &rotation.x);
+		ImGui::DragFloat3("scale", &scale.x);
 
 
 		ImGui::TreePop();

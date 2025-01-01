@@ -13,7 +13,10 @@ namespace testbed
 		GameObject(Vector3 position = { 0.0f, 0.0f, 0.0f }) :
 			transform(position)
 		{}
-
+		virtual ~GameObject()
+		{
+			model.ref = nullptr;
+		}
 
 		virtual void Update(float dt)
 		{
@@ -71,7 +74,7 @@ namespace testbed
 
 	public:
 		PlayerControllerTest2()
-			: Test("Player Controller Test No. 2", BLACK)
+			: Test("Player Controller Test No. 2", GetColor(0x3C443DFF))
 		{
 			const char* dummyfp = "C:/GameDev/Assets/raildogameart/GLB/dummy.glb";
 
@@ -135,8 +138,8 @@ namespace testbed
 		virtual void Inspect()
 		{
 			ImGui::Checkbox("paused", &this->paused);
+			ImGui::ColorEditRay("backgroundColor", &this->backgroundColor);
 			camController.Inspect();
-			//ImGui::Camera3DEdit("camera", &this->camera);
 			player.Inspect("Player");
 		};
 		static Test* Generate() { return new PlayerControllerTest2(); }
