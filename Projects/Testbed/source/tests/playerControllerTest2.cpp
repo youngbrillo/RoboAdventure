@@ -1,6 +1,6 @@
 
 #include "test.h"
-#include <gamelib/core/components/components.h>
+#include <gamelib/gameLib.h>
 
 namespace testbed
 {
@@ -137,6 +137,7 @@ namespace testbed
 		virtual void Inspect()
 		{
 			ImGui::Checkbox("paused", &this->paused);
+			ImGui::Camera3DEdit("camera", &this->camera);
 			player.Inspect("Player");
 		};
 		static Test* Generate() { return new PlayerControllerTest2(); }
