@@ -136,8 +136,7 @@ void testbed::TestManager::DrawMenu(Test* active)
         ImGui::EndMainMenuBar();
     }
 }
-
-////#include <gamelib/core/utils/serialization/commonSerialization.h>
+#include <gamelib/utilities/serialization/commonSerialization.h>
 #include <gamelib/gameLib.h>
 #include <iostream>
 #include <fstream>
@@ -148,15 +147,15 @@ void testbed::TestManager::DrawMenu(Test* active)
 void testbed::TestManager::SaveSettings(const char* fileLocation)
 {
     auto& i = Get();
-    //YAML::Emitter out;
-    //out << YAML::BeginMap;
-    //out << YAML::Key << "currentIndex" << YAML::Value << i.currentIndex;
-    //out << YAML::Key << "defaultIndex" << YAML::Value << i.defaultIndex;
-    //out << YAML::EndMap;
+    YAML::Emitter out;
+    out << YAML::BeginMap;
+    out << YAML::Key << "currentIndex" << YAML::Value << i.currentIndex;
+    out << YAML::Key << "defaultIndex" << YAML::Value << i.defaultIndex;
+    out << YAML::EndMap;
 
 
-    //std::ofstream fileout(fileLocation);
-    //fileout << out.c_str();
+    std::ofstream fileout(fileLocation);
+    fileout << out.c_str();
 
 }
 
@@ -166,14 +165,14 @@ void testbed::TestManager::LoadSettings(const char* fileLocation)
 
     if (!std::filesystem::exists(fp))
         return;
-    //std::ifstream stream(fp);
-    //std::stringstream strStream;
-    //strStream << stream.rdbuf();
-    //auto& i = Get();
+    std::ifstream stream(fp);
+    std::stringstream strStream;
+    strStream << stream.rdbuf();
+    auto& i = Get();
 
-    //YAML::Node root = YAML::Load(strStream.str());
-    //i.currentIndex = root["currentIndex"].as<int>();
-    //i.defaultIndex = root["defaultIndex"].as<int>();
+    YAML::Node root = YAML::Load(strStream.str());
+    i.currentIndex = root["currentIndex"].as<int>();
+    i.defaultIndex = root["defaultIndex"].as<int>();
 
 }
 

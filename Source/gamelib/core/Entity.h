@@ -5,7 +5,7 @@
 #include <raylib/raylib.h>
 #include "UUID.h"
 
-namespace aq
+namespace glib
 {
     class Entity
     {
