@@ -36,7 +36,7 @@ void glib::ModelAnimator::Update(float dt, Model& model)
 			nextAnimation = index;
 			anim = animations[index];
 			currentFrame = -1;
-			frameEnded = true;
+			//frameEnded = true;
 		}
 		frameEnded = ((currentFrame + 1) == anim.frameCount);
 		currentFrame = (currentFrame + 1) % anim.frameCount;
