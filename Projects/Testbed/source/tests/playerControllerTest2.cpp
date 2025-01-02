@@ -121,10 +121,6 @@ namespace testbed
 			Vector2 dir = glib::io::GetLeftJoystickDirection();
 			Vector2 inputDir = Vector2Normalize(dir);
 			Vector3 moveVec = { inputDir.x * movement_speed, 0.0f, inputDir.y * movement_speed }; //target velocity
-			//Vector3 moveVec = { 0,0,0 };
-
-			//moveVec.z = tarVel.y;
-			//moveVec.x = tarVel.x;
 			Matrix rotMat = MatrixRotateY(camera->viewAngle.x); // a matrix for the plane rotation
 			moveVec = Vector3Transform(moveVec, rotMat); // transform the movement vector into world space, but ignore the tilt so it is in plane
 
@@ -136,13 +132,13 @@ namespace testbed
 				velocity.y = moveVec.y;
 				velocity.z = moveVec.z;
 				this->isMoving = true;
-
-				//float angle = atan2f(camera->viewAngle.x, camera->viewAngle.y);
-				float angle = atan2f(inputDir.x, inputDir.y);
+				Vector2 _dir = { moveVec.x, moveVec.z }; _dir = Vector2Normalize(_dir);
+				float angle = atan2f(_dir.x, _dir.y);
 				transform.rotation = QuaternionFromAxisAngle(Vector3{ 0.0f, 1.0f, 0.0f }, angle);
 			}
 			else
 			{
+
 				velocity = { 0.0f, 0.0f , 0.0f};
 				this->isMoving = false;
 			}
