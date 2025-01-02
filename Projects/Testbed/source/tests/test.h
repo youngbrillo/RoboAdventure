@@ -13,8 +13,9 @@ namespace testbed
 	public:
 		std::string name;
 		Color backgroundColor = BLACK;
-		bool isInspecting = true;
-		bool paused = false;
+		bool paused = false, isInspecting = true, isFPSDebug = true;
+		int fpsDebugPos = 0;
+
 	public:
 		Test(std::string Name, Color color = BLACK) : name(Name), backgroundColor(color) {}
 		virtual ~Test() {};

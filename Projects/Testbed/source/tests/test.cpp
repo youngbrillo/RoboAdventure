@@ -178,9 +178,15 @@ void testbed::TestManager::LoadSettings(const char* fileLocation)
 
 void testbed::Test::InspectWrapper()
 {
-    if (!isInspecting) 
-        return;
-    ImGui::Begin(name.c_str(), &isInspecting);
+    if (isInspecting)
+    {
+        ImGui::Begin(name.c_str(), &isInspecting);
         this->Inspect();
-    ImGui::End();
+        ImGui::End();
+    }
+
+    if (isFPSDebug)
+    {
+        ImGui::ViewFPS(&isFPSDebug, fpsDebugPos);
+    }
 }

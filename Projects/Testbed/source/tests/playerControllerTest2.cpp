@@ -176,7 +176,7 @@ namespace testbed
 		glib::Camera3DController camController;
 		std::vector<Model> model_list;
 		std::vector<GameObject*> gameObjects;
-
+		Font font;
 	public:
 		PlayerControllerTest2()
 			: Test("Player Controller Test No. 2", GetColor(0x3C443DFF))
@@ -208,7 +208,7 @@ namespace testbed
 				, "C:/GameDev/Assets/raildogameart/GLTF/dumy_stand.gltf"
 				, "C:/GameDev/Assets/raildogameart/GLTF/wooden_stand.gltf"
 				, "C:/GameDev/Assets/raildogameart/GLTF/plat_spike.gltf"
-				//, "C:/GameDev/Assets/raildogameart/GLTF/gridmap.gltf"
+				, "C:/GameDev/Assets/raildogameart/GLTF/gridmap.gltf"
 				, "C:/GameDev/Assets/raildogameart/GLTF/cone.gltf"
 				, "C:/GameDev/Assets/raildogameart/GLTF/plat_move.gltf"
 			};
@@ -230,6 +230,9 @@ namespace testbed
 			player.animator.Load(dummyfp);
 			player.animator.SetAnimationName("idle");
 			player.actionAnim = "roll";
+
+			const char* fontfp = "C:/GameDev/Assets/fonts/ggbot/HomeVideo_Font_0_8/TrueType (.ttf)/HomeVideo-Regular.ttf";
+			font = LoadFont(fontfp);
 		}
 
 		~PlayerControllerTest2()
@@ -245,6 +248,7 @@ namespace testbed
 			}
 
 			gameObjects.clear();
+			UnloadFont(font);
 		}
 
 		virtual void Set()
@@ -281,14 +285,17 @@ namespace testbed
 			player.Draw();
 			EndMode3D();
 
-			DrawText(name.c_str(), 20, GetScreenHeight() - 40, 20, WHITE);
+			DrawTextEx(font, name.c_str(), Vector2{ 20.0f,GetScreenHeight() - 40.0f }, 20.0f, 1.0f, WHITE);
+			//DrawText(name.c_str(), 20, GetScreenHeight() - 40, 20, WHITE);
 		};
+
 		virtual void Inspect()
 		{
 			ImGui::Checkbox("paused", &this->paused);
 			ImGui::ColorEditRay("backgroundColor", &this->backgroundColor);
 			camController.Inspect();
 			player.Inspect("Player");
+
 		};
 		static Test* Generate() { return new PlayerControllerTest2(); }
 	};
