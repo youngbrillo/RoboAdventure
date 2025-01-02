@@ -14,7 +14,7 @@ namespace glib
 
 	struct IDComponent { UUID id = 0x0; };
 
-	struct Transform3D : Transform {
+	struct Transform3D : public Transform {
 		Transform3D(Vector3 position = {0.0f, 0.0f, 0.0f})
 		{
 			translation = position;
@@ -32,14 +32,14 @@ namespace glib
 		void Inspect(const char* label = "Transform 3D");
 	};
 
-	struct Velocity3D : Vector3 {
+	struct Velocity3D : public Vector3 {
 		Velocity3D(float x_ = 0, float y_ = 0, float z_ = 0)
 		{
 			this->x = x_, this->y = y_, this->z = z_;
 		}
+		Velocity3D(const Velocity3D& v) = default;
 
 		void Inspect(const char* label = "Velocity 3D");
-
 	};
 
 	struct Model3D

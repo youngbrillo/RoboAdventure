@@ -18,7 +18,7 @@ namespace testbed
 			model.ref = nullptr;
 		}
 
-		virtual void Update(float dt)
+		virtual void Update(float dt, glib::Camera3DController* camera = nullptr)
 		{
 			glib::Transform3D_ApplyVelocity(transform, velocity, dt);
 		}
@@ -49,9 +49,9 @@ namespace testbed
 			animator.UnLoad();
 		}
 
-		virtual void Update(float dt) override
+		virtual void Update(float dt, glib::Camera3DController* camera = nullptr) override
 		{
-			GameObject::Update(dt);
+			GameObject::Update(dt, camera);
 			animator.Update(dt, *model.ref);
 		}
 
@@ -66,9 +66,95 @@ namespace testbed
 		}
 	};
 
+	struct GameObject_Character : public GameObject_Animating
+	{
+		float movement_speed = 3.0f;
+		bool isMoving = false;
+		std::string idleAnim = "idle", moveAnim = "run";
+
+		Vector3 forward = { 1.0f, 0.0f, 1.0f };
+		GameObject_Character(Vector3 position = { 0.0f, 0.0f, 0.0f }) : GameObject_Animating(position)
+		{}
+
+
+		virtual void Update(float dt, glib::Camera3DController* camera = nullptr) override
+		{
+			if (isMoving) {
+				animator.SetAnimationName(moveAnim.c_str());
+
+				
+
+			}
+			else {
+				animator.SetAnimationName(idleAnim.c_str());
+
+
+			}
+
+
+
+			GameObject_Animating::Update(dt, camera);
+		}
+		virtual void Inspect(const char* label = "Character GameObject") override
+		{
+			if (ImGui::TreeNode(label))
+			{
+				GameObject::Inspect("base");
+				animator.inspect();
+				ImGui::SliderFloat("movement speed", &movement_speed, 0.5f, 10.0f);
+				ImGui::DragFloat3("forward direction", &forward.x);
+
+				ImGui::TreePop();
+			}
+		}
+	};
+	struct GameObject_Player : public GameObject_Character
+	{
+		GameObject_Player(Vector3 position = { 0.0f, 0.0f, 0.0f }) : GameObject_Character(position)
+		{}
+
+
+
+		virtual void Update(float dt, glib::Camera3DController* camera = nullptr) override
+		{
+
+			Vector2 dir = glib::io::GetLeftJoystickDirection();
+			Vector2 inputDir = Vector2Normalize(dir);
+			Vector3 moveVec = { inputDir.x * movement_speed, 0.0f, inputDir.y * movement_speed }; //target velocity
+			//Vector3 moveVec = { 0,0,0 };
+
+			//moveVec.z = tarVel.y;
+			//moveVec.x = tarVel.x;
+			Matrix rotMat = MatrixRotateY(camera->viewAngle.x); // a matrix for the plane rotation
+			moveVec = Vector3Transform(moveVec, rotMat); // transform the movement vector into world space, but ignore the tilt so it is in plane
+
+
+
+			if (Vector2Length(inputDir) > 0.01f)
+			{
+				velocity.x = moveVec.x;
+				velocity.y = moveVec.y;
+				velocity.z = moveVec.z;
+				this->isMoving = true;
+
+				//float angle = atan2f(camera->viewAngle.x, camera->viewAngle.y);
+				float angle = atan2f(inputDir.x, inputDir.y);
+				transform.rotation = QuaternionFromAxisAngle(Vector3{ 0.0f, 1.0f, 0.0f }, angle);
+			}
+			else
+			{
+				velocity = { 0.0f, 0.0f , 0.0f};
+				this->isMoving = false;
+			}
+
+			GameObject_Character::Update(dt, camera);
+		}
+
+	};
+
 	class PlayerControllerTest2 : public Test
 	{
-		GameObject_Animating player;
+		GameObject_Player player;
 		glib::Camera3DController camController;
 		std::vector<Model> model_list;
 
@@ -115,6 +201,8 @@ namespace testbed
 			};
 
 			player.transform = glib::Transform3D();
+
+			camController.target = &player.transform.translation;
 		}
 		virtual void Unset()
 		{
@@ -124,7 +212,7 @@ namespace testbed
 		virtual void Update(float dt)
 		{
 			camController.Update(dt);
-			player.Update(dt);
+			player.Update(dt, &camController);
 		}
 		virtual void Draw()
 		{
