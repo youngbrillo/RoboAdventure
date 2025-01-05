@@ -24,8 +24,10 @@ testbed::TestManager& testbed::TestManager::Get()
 
 int testbed::TestManager::AddEntry(std::string name, std::string category, TestGenerationFunction func)
 {
-    Get().entries.emplace_back(name, category, func);
-    return Get().entries.size() - 1;
+    TestEntry e = Get().entries.emplace_back(name, category, func);
+    e.id = Get().entries.size() - 1;
+    Get().categoryLookups[e.category].push_back(e.id);
+    return e.id;
 }
 
 testbed::Test* testbed::TestManager::GetDefaultTest()
@@ -53,6 +55,11 @@ void testbed::TestManager::listenforInputs()
             else
                 wantRestartTest = true;
         }
+    }
+
+    if(IsKeyPressed(KEY_F1))
+    {
+        if(ActiveTest) ActiveTest->isInspecting = !ActiveTest->isInspecting;
     }
 
     if (wantNewTest)
@@ -83,6 +90,11 @@ void testbed::TestManager::Update(float dt)
 {
     if (ActiveTest) ActiveTest->Update(dt);
 
+}
+
+void testbed::TestManager::FixedUpdate(float timeStep)
+{
+    if (ActiveTest) ActiveTest->FixedUpdate(timeStep);
 }
 
 void testbed::TestManager::Draw()
@@ -123,12 +135,19 @@ void testbed::TestManager::DrawMenu(Test* active)
 
         if (ImGui::BeginMenu("Tests"))
         {
-            for (int i = 0; i < entries.size(); i++)
+            for (auto& pair : categoryLookups)
             {
-                if (ImGui::MenuItem(entries[i].name.c_str()))
+                if (ImGui::BeginMenu(pair.first.c_str()))
                 {
-                    currentIndex = i;
-                    wantNewTest = true;
+                    for (int i : pair.second)
+                    {
+                        if (ImGui::MenuItem(entries[i].name.c_str(), TextFormat("%d", i), i == currentIndex))
+                        {
+                            currentIndex = i;
+                            wantNewTest = true;
+                        }
+                    }
+                    ImGui::EndMenu();
                 }
             }
             ImGui::EndMenu();
