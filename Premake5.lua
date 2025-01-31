@@ -15,6 +15,7 @@ group "Samples"
 	-- include "Projects/Editor"
 	include "Projects/Game"
 	include "Projects/TestBed"
+	include "Projects/TowerDefense"
 group ""
 
 group "Libraries"

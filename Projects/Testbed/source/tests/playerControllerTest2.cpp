@@ -11,6 +11,7 @@ namespace testbed
 		//glib::Model3D model;
 		Model model;
 		Color tint = WHITE;
+		std::string name = "game object";
 
 		GameObject(Vector3 position = { 0.0f, 0.0f, 0.0f }) :
 			transform(position)
@@ -225,6 +226,7 @@ namespace testbed
 				GameObject* object = gameObjects.emplace_back(new GameObject(pos));
 				//object->model.ref = &model;
 				object->model = model;
+				object->name = GetFileNameWithoutExt(filename);
 			}
 
 			player.animator.Load(dummyfp);
@@ -295,6 +297,13 @@ namespace testbed
 			ImGui::ColorEditRay("backgroundColor", &this->backgroundColor);
 			camController.Inspect();
 			player.Inspect("Player");
+
+			if(ImGui::TreeNode("objects"))
+			{
+				for (auto&& obj : gameObjects)
+					obj->Inspect(obj->name.c_str());
+				ImGui::TreePop();
+			}
 
 		};
 		static Test* Generate() { return new PlayerControllerTest2(); }
