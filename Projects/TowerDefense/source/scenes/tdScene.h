@@ -1,11 +1,16 @@
 #pragma once
-
 #include "sceneManager.h"
+#include "../components/com_core.h"
 
 namespace td
 {
+	constexpr int max_entities = 400;
+
 	class TowerDefenseScene : public scene
 	{
+		TowerSystem towers;
+		EnemySystem enemies;
+		ProjectileSystem projectiles;
 	public:
 		TowerDefenseScene(Color color = BLACK);
 		virtual ~TowerDefenseScene();
@@ -19,5 +24,6 @@ namespace td
 
 	public:
 		Camera3D camera = {};
+		entt::registry ecs;
 	};
 }
